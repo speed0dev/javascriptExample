@@ -19,10 +19,30 @@
 <script>
 $(document).ready(()=>{
 	
+	
+	//
 
 	btnTest("AAAA", (e)=>{
 		L_("AAAAAAA");
+
+		L_( srialNumber(100, 130) );
+
 	});
+
+	// ³â¿ùÀÏ
+	function srialNumber(a, b){
+		let depth = b-a;
+		let rData = {};
+
+		//addNumber 
+		for(let i=0;i<depth;i++){
+			rData["0" + i] = i;
+		}
+		return rData;
+	}
+
+	
+
 });	
 </script>
 

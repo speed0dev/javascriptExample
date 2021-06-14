@@ -49,13 +49,13 @@ $(document).ready(()=>{
 		//
 		//let date = new Date(2020,11,31); //
 
-		let date = new Date(2020,10,01); //
+		let date = new Date(2020,10-1,01); // <== 
 		
 		for(let i=1; i<depth; i++){
 
 			//
 			//date.setDate( date.getDate() +  1)  :
-			date.setMonth( date.getMonth()+1 );
+			
 
 			var d = date.getDate()>9?date.getDate():"0"+date.getDate(); 
 			var m = date.getMonth()+1>9?date.getMonth()+1:"0"+(date.getMonth()+1)
@@ -63,6 +63,8 @@ $(document).ready(()=>{
 			var y = date.getFullYear();
 
 			L_( y + "." + m+"." + d );
+
+			date.setMonth( date.getMonth()+1 );
 		}
 	}
 

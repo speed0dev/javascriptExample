@@ -1,0 +1,6 @@
+log.log
+# debuging
+debug
+*.log
+build/
+builds/.log

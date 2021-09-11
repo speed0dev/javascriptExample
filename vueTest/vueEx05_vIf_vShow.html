@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-language" content="ko">
+<meta name="language" content="ko">
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+
+
+<title></title>
+
+<link rel="stylesheet" type="text/css" href="../css/common.css">
+<script type="text/javascript" id="wiget" src="../as/load_as.js" async=""></script>
+
+<!--
+<script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+-->
+<script type="text/javascript" src="../js/vue.js"> </script>
+
+<script type="text/javascript" src="../lib/DBinder.js"></script>
+<script type="text/javascript" src="../lib/LDebug.js"></script>
+
+<style>
+	.red{ color: red;}
+	.bold{ font-weight: bold;}
+
+	.red-bold{ color: red; font-weight: bold;}
+
+</style>
+
+
+<script type="text/javascript">
+// global 
+
+//
+function I_(id){
+	return document.getElementById(id)||null;
+}
+
+//
+document.addEventListener("DOMContentLoaded", function(){  //$(document).ready() 동일한 기능
+	L_("Load...");	
+	loadDebug();	
+
+	//
+	function loadDebug(){
+		
+		btnTest("[Data link경로변경]", (e)=>{
+			// Vue.data 에 접근 할수 있는 방법은?
+			L_(v_);  // v_로 받을 수 있음
+
+		});
+
+		//
+		let cnt = 0;
+		btnTest("[check]", (e)=>{
+			let el = I_("check01");
+			L_(el);
+		});
+
+		//
+		
+		
+	}
+});	
+
+
+</script>
+
+
+
+
+</head>
+
+<body>
+
+	<noscript>
+	<iframe src="../include/ns.html?id=DateTime" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+	</noscript>
+
+
+	<div id="wrap">
+		<div id="_DEBUG_"></div>
+	<div>
+
+	<div style="height:40px;"></div><hr/>
+
+	<div id= "app">
+		<div>
+			<div id="check01" v-if="show" >Yes</div>	
+			<div id="check02" v-if="show" >Yes</div>
+			<div id="check02" v-else="show" >No</div>
+			<button @click="changeIf">Click</button>
+		</div>
+
+
+		<div style="height:40px;"></div><hr/>
+		<!-- template 사용법 -->
+		<template v-if="bListShow">
+			<div>1000</div>
+			<div>2000</div>
+			<div>3000</div>
+			<div>4000</div>
+		</template>
+		<div><button @click="changeList" >click</button></div>
+
+
+
+		<div style="height:40px;"></div><hr/>
+		<div>
+			<div v-if="number===1">넘버1</div>
+			<div v-else-if="number===2">넘버2</div>
+			<div v-else-if="number===3">넘버3</div>
+			<div v-else>넘버X</div>
+			<div>{{number}}</div>
+			<div><button @click="addNumber">Click</button></div>
+		</div>
+
+
+
+		<div style="height:40px;"></div><hr/>
+		<div> v-show
+			<div>{{show}} <button @click="changeShow">Click</button> </div>
+			<div id="check01" v-show="show" >Yes</div>	
+			
+		</div>
+
+
+	</div> <!--//#app-->
+
+	
+
+
+<script>
+	//-----------------
+	// <template>
+	// v-if, v-else-if, v-else
+	// v-show
+	// vue code
+	let count = 0;
+
+	const v_ = new Vue({
+		 el: "#app"
+
+		,data: {
+			show: true
+			,bListShow: true
+			,number: 0
+		}
+
+		// event
+
+		// 실행메소드
+		,methods: {
+			changeList(){
+				this.bListShow = !this.bListShow;
+				L_("bListShow=" + this.bListShow);
+
+			}
+			
+			,changeIf(){
+				this.show = !this.show;
+				
+			}
+
+			,changeShow(){
+				this.show = !this.show;
+				L_("show:" + this.show);
+			}
+			
+			,addNumber(){
+				++this.number;
+				L_(" number=" + this.number);
+			}
+		
+		}
+
+
+		// 캐싱함  method는 캐싱하지 않음.
+		,computed: {
+		
+
+		}
+
+		,watch: {
+			
+		}
+	
+	});
+
+</script>
+
+
+</body>
+</html>

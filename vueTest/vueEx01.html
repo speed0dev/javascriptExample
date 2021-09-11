@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-language" content="ko">
+<meta name="language" content="ko">
+<meta property="og:url" content="http://test.tst">
+<meta property="og:title" content="타이틀">
+<meta property="og:type" content="website">
+<meta property="og:description" content="테스트 홈피.">
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+<meta name="Author" content="">
+<meta name="copyright" content="(c)2021">
+<meta name="Robots" content="ALL">
+<meta name="keywords" content="키워드">
+<meta name="description" content="설명">
+<title></title>
+
+<link rel="stylesheet" type="text/css" href="../css/common.css">
+<script type="text/javascript" id="wiget" src="../as/load_as.js" async=""></script>
+
+<!--
+<script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+-->
+<script type="text/javascript" src="../js/vue.js"> </script>
+
+<script type="text/javascript" src="../lib/DBinder.js"></script>
+<script type="text/javascript" src="../lib/LDebug.js"></script>
+
+
+<script type="text/javascript">
+// global 
+
+function ID_(id){
+	return document.getElementById(id)||null;
+}
+
+//
+document.addEventListener("DOMContentLoaded", function(){  //$(document).ready() 동일한 기능
+	L_("Load...");	
+	loadDebug();	
+
+	//
+	function loadDebug(){
+		
+		btnTest("[Data link경로변경]", (e)=>{
+			// Vue.data 에 접근 할수 있는 방법은?
+			// 
+			L_(v_);  // v_로 받을 수 있음
+
+			L_(v_.name);
+
+
+		});
+
+		//
+		let cnt = 0;
+		btnTest("[input값변경]", (e)=>{
+			v_.name = "변경한 값" + cnt;
+			++cnt;
+		});
+		
+	}
+});	
+
+
+//
+function btnEvent(){
+	//alert("버튼 클릭!");
+	L_("[button]click@@@");
+
+}
+
+</script>
+
+
+
+
+</head>
+
+<body>
+
+	<noscript>
+	<iframe src="../include/ns.html?id=DateTime" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+	</noscript>
+
+
+	<div id="wrap">
+		<div id="_DEBUG_"></div>
+	<div>
+
+	<hr/>
+
+	
+	<div>
+		<div id="_CHECK_">check 지역</div>
+	</div>
+	
+	<div id= "app">
+		<div>데이터 {{name}} {{age}} {{code}} 
+			<div>{{person.name}}</div>
+			<hr/>
+			<div>{{nextYear("1000")}}</div>
+			
+			<hr/>
+			<div>내부데이터 실행값으로 가져오기</div>
+			<div>{{nextYear(code)}}</div>
+
+			<hr/>
+			<div>
+				{{nextCall(code)}}
+			</div>
+
+
+			<div>
+				<!-- <input type="text" value="{{name}}" /> -->  <!--바인드 안됨 -->
+
+				<input id="input1" type="text" v-bind:value="name" /> <!--바인드 됨-->
+				
+				<input id="input2" type="text" :value="inputVar" /> <!--바인드 됨-->
+
+				<a :href="link">youtube</a> <!-- bind -->
+
+				<!-- <a :href="methodCallLink(v_.linkChannel)"></a> -->	<!-- bind  text 만 {{}} value로 표시가능함 -->
+				
+				<a :href="methodCallLink('kossiecoder')">코지코더 채널</a>
+			</div>
+
+
+			<div style="height:40px;"></div>
+			<hr/>
+			<div><button onclick="btnEvent()" >스크립트 버튼</button></div>
+			<div><button id="ID_bindButton"  v-on:click="btnCall" >bind 버튼</button></div>
+
+
+			<div style="height:40px;"></div>
+			<hr/>
+			<div>
+				<div>[순서의 값처리]</div>
+				<!-- <form id="frm" v-on:submit="frmSubmit" >  -->
+				<form id="frm" action="/">
+					<input type="text" />	
+					<input type="text" />
+					<input type="text" />
+					<input type="text" />
+					<button type="submit">Submit</button>
+					<button v-on:click="send" >전송</button>
+				</form>
+			</div>
+
+
+		</div>
+
+
+		<div style="height:40px;"></div><hr/>
+		<div>양방향 바인드
+			<!-- <div><input type="text" :value="message" v-on:keyup="updateText" /></div> -->
+			<div><input type="text" :value="message" @keyup="updateText" /></div> <!-- 단축표현법 -->
+
+			<div><input type="text" v-model="message" /></div> <!-- v-model 을 이용한 단축표시 --> 
+
+			<div><span>{{message}}</span></div>
+		</div>
+
+	</div> <!--//#app-->
+
+	
+
+
+<script>
+// html 에서 전송방식 및 링크 방식 
+
+// vue bind 방식 과 
+// value, method, event 를 bind 하는 예제
+// event의 특정 조건을 생성 하는 방법
+//
+// 양방향 데이터 바인딩 (2개이상) v-bind
+//
+
+
+	// vue code
+	const v_ = new Vue({
+		 el: "#app"
+
+		// json
+		,data: {
+			name: "$$$한글처리$$$"
+			,age: 40
+			,code: 1024
+			,message: "정보입니다."
+
+			,person:{
+				name: "사람이름"
+				,age: 40
+			}
+			, inputVar: 12345 
+
+			, link: "http://www.youtube.com/"
+
+			, linkName: "AAAAAAAAAAA"
+
+			, linkChannel: "kossiecoder"
+		}
+
+		// event
+
+		// 실행메소드
+		,methods: {
+			nextYear: function(param){		// 사용안됨 ()=>{} , 파라미터 넣는방법
+				L_(">>>>" + param);
+
+				return  "@" + param + "@" + this.person.name + " 내년나이 " + (this.person.age +1);
+			}
+
+			//함수줄여서 사용하기
+			,nextCall(param){
+				//return "@{" + param + "}@" + person.name;  // 반드시 this를 붙혀야 함. 오류
+
+				return "@{" + param + "}@" + this.person.name; 
+			}
+
+			, methodCallLink(channel){
+
+				return this.link + channel;
+			}
+
+			// 
+			, btnCall(e){
+				//
+				//L_(e);
+				L_(e.target);
+				let id = e.target.id;
+				L_(id);
+			}
+
+			,updateText(e){  // e, event 
+				this.message = event.target.value;
+			}
+
+			,frmSubmit(){
+				L_("submit 호출");
+
+			}
+
+			,send(){
+				let frm = ID_("frm");
+				L_(frm);
+				frm.submit();
+			}
+		}
+	})
+
+</script>
+
+
+</body>
+</html>

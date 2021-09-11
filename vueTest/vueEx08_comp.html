@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-language" content="ko">
+<meta name="language" content="ko">
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+
+
+<title></title>
+
+<link rel="stylesheet" type="text/css" href="../css/common.css">
+<script type="text/javascript" id="wiget" src="../as/load_as.js" async=""></script>
+
+<!--
+<script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+-->
+<script type="text/javascript" src="../js/vue.js"> </script>
+
+<script type="text/javascript" src="../lib/DBinder.js"></script>
+<script type="text/javascript" src="../lib/LDebug.js"></script>
+
+<style>
+	
+
+</style>
+
+
+<script type="text/javascript">
+// global 
+
+//
+function ID_(id){
+
+	return document.getElementById(id)||null;
+}
+
+//
+document.addEventListener("DOMContentLoaded", function(){  //$(document).ready() 동일한 기능
+	L_("Load...");	
+	loadDebug();	
+
+	//
+	function loadDebug(){
+		
+		btnTest("[Data link경로변경]", (e)=>{
+			// Vue.data 에 접근 할수 있는 방법은?
+			L_(v_);  // v_로 받을 수 있음
+
+		});
+
+		//
+		let cnt = 0;
+		btnTest("[check]", (e)=>{
+			let el = ID_("check01");
+			L_(el);
+		});
+
+		//
+		
+		
+	}
+});	
+
+
+</script>
+
+
+</head>
+
+<body>
+
+
+	<div id="wrap">
+		<div id="_DEBUG_"></div>
+	<div>
+	
+	<div style="height:40px;"></div><hr/>
+	<div>
+
+		<!--#app-->
+		<div id="app">
+			<comp1>AA</comp1>
+		</div> <!--//#app-->
+
+		
+
+		<div style="height:40px;"></div><hr/>
+		
+		
+		<!--#app-1-->
+		<!--
+		<div id="app-1">
+			<mComp-button></mComp-button>
+		<div>
+		-->
+		<!--//#app2-->
+
+		
+		
+
+	</div>
+
+
+<script>
+	//-----------------
+	// Component 동일한 기능 
+	//
+	// 
+	// vue code
+	let count = 0;
+
+
+/*
+
+	Vue.component("hello-w",{
+		template: "<div> Hello World</div>"
+
+		,data(){
+
+			return {
+
+			}
+
+
+		}
+		, methods:{
+
+		}
+
+	});
+
+	Vue.component("mComp-button", { 
+
+		template: `
+			<div>
+				<div>RRRRRRRRRRRRRRR</div>
+				
+				<button @click="changeText">Click</button>
+			</div>
+		`	
+
+		, data(){  // 각각 data의 주소값이 넘어감.
+			return {
+				name: 'kossie'
+				, age: 40
+			}
+		}
+
+		,methods: {
+
+			changeText(){
+				this.name = "Koss" + " RRRRRRRRRRR";
+			}
+		}
+
+	});
+
+*/
+
+	// 설정값 만 넘김 - 지역 컴포넌트 구성
+	const compButton = {
+		template: `
+			<div>지역</div>
+				<div><button @click="changeText">확인</button></div>
+			<div>END</div>
+		`
+		, data(){
+			return{
+				name: "check0001 AAAAAAAAA"
+			}
+		}
+
+		,methods: {
+			changeText(){
+				this.name = "kossio update";
+				L_(this.name);
+			}
+
+		}
+	};
+
+	const v_ = new Vue({
+		 el: "#app"
+		,components:{
+			"comp1" : compButton
+		}
+
+	
+	});
+
+
+	/*
+	const v2_ = new Vue({
+		 el: "#app-1"
+
+	
+	});
+	*/
+
+</script>
+
+
+</body>
+</html>

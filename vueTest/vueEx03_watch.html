@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-language" content="ko">
+<meta name="language" content="ko">
+<meta property="og:url" content="http://test.tst">
+<meta property="og:title" content="타이틀">
+<meta property="og:type" content="website">
+<meta property="og:description" content="테스트 홈피.">
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+<meta name="Author" content="">
+<meta name="copyright" content="(c)2021">
+<meta name="Robots" content="ALL">
+<meta name="keywords" content="키워드">
+<meta name="description" content="설명">
+<title></title>
+
+<link rel="stylesheet" type="text/css" href="../css/common.css">
+<script type="text/javascript" id="wiget" src="../as/load_as.js" async=""></script>
+
+<!--
+<script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+-->
+<script type="text/javascript" src="../js/vue.js"> </script>
+
+<script type="text/javascript" src="../lib/DBinder.js"></script>
+<script type="text/javascript" src="../lib/LDebug.js"></script>
+
+
+<script type="text/javascript">
+// global 
+
+function ID_(id){
+	return document.getElementById(id)||null;
+}
+
+//
+document.addEventListener("DOMContentLoaded", function(){  //$(document).ready() 동일한 기능
+	L_("Load...");	
+	loadDebug();	
+
+	//
+	function loadDebug(){
+		
+		btnTest("[Data link경로변경]", (e)=>{
+			// Vue.data 에 접근 할수 있는 방법은?
+			L_(v_);  // v_로 받을 수 있음
+
+		});
+
+		//
+		let cnt = 0;
+		btnTest("[input값변경]", (e)=>{
+			
+		});
+
+		//
+		
+		
+	}
+});	
+
+
+</script>
+
+
+
+
+</head>
+
+<body>
+
+	<noscript>
+	<iframe src="../include/ns.html?id=DateTime" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+	</noscript>
+
+
+	<div id="wrap">
+		<div id="_DEBUG_"></div>
+	<div>
+
+	<div style="height:40px;"></div><hr/>
+
+	
+	<div id= "app">
+		<div>
+			<div>{{message}}</div>
+			<button @click="changeMessage">Click</button>
+			<div>{{update}}</div>
+		</div>
+
+		<div style="height:40px;"></div><hr/>
+		
+		<div>
+			
+		</div>
+
+	</div> <!--//#app-->
+
+	
+
+
+<script>
+	//-----------------
+	// watch 속성 test newVal, oldVal
+	//
+	// vue code
+	let count = 0;
+
+	const v_ = new Vue({
+		 el: "#app"
+
+		,data: {
+			 number: 1
+			,message: "abcdef12345"
+			,update: "아니오"
+		}
+
+		// event
+
+		// 실행메소드
+		,methods: {
+			
+			changeMessage(){
+				this.message = "코지코더";
+			}
+			
+		}
+
+
+		// 캐싱함  method는 캐싱하지 않음.
+		,computed: {
+			//
+			reversedMessage(){
+				++count;
+				L_( "call count=" + count );  // 한번 증가됨
+				return this.message.split('').reverse().join('');
+			}
+
+		}
+
+		,watch: {
+			message(newVal, oldVal){
+				// 값이 변경되면 호출됨.
+				L_(" newVal=" + newVal + " oldVal=" + oldVal);
+				
+				//
+				this.update = "네";		//
+		
+			}
+
+		}
+	
+	});
+
+</script>
+
+
+</body>
+</html>

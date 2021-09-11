@@ -130,7 +130,8 @@ const DBinder = (()=>{
 	return {
 	
 		tagBind: function(id, data){
-
+			
+			//
 			tagBind_(id, data);
 		}		
 	}
@@ -143,6 +144,13 @@ const DBinder = (()=>{
 
 
 const doc_ = document;
+
+function ID(id){
+	if(id===undefined || id==""){
+		return null;
+	}
+	return document.getElementById(id)||null;
+}
 //
 document.addEventListener("DOMContentLoaded", function(){  //$(document).ready() 동일한 기능
 	L_("Load...");
@@ -221,10 +229,24 @@ document.addEventListener("DOMContentLoaded", function(){  //$(document).ready()
 		});
 
 
-		btnTest("[middle]제거", (e)=>{
+		btnTest("[jsonData]Bind", (e)=>{
+			//
+			let jData = {name:"AAAA", age:10, value:1203333, info:"한글", rVar:12.3456 };
 			
-			let middle = doc_.getElementById("middle");
+			let dNode = ID("test");
 
+			dNode.setAttribute("var", jData.value);
+			dNode.setAttribute("info", jData.info);
+
+				
+			L_(dNode);
+			// data-bind
+			let text = dNode.innerHTML;
+			L_(text);	
+			let textContent = dNode.textContent;
+			L_(textContent);
+
+			
 		});
 		
 	}
@@ -270,7 +292,12 @@ document.addEventListener("DOMContentLoaded", function(){  //$(document).ready()
 
 	<div>
 		<div>JSON data bind</div>
+		<div id="test" data-bind-if=""  data-bind-on="" data-bind-idx="" data-bind-id="" data-bind-name="" data-bind-change=""  >
+				{{name}} AAA
+				<a href="#">[링크]</a>
+				<div id="check" >내용입니다.{{name}} || {{value}}</div>
 
+		</div>
 	</div>
 
 

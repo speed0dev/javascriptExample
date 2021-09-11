@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-language" content="ko">
+<meta name="language" content="ko">
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+
+
+<title></title>
+
+<link rel="stylesheet" type="text/css" href="../css/common.css">
+<script type="text/javascript" id="wiget" src="../as/load_as.js" async=""></script>
+
+<!--
+<script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+-->
+<script type="text/javascript" src="../js/vue.js"> </script>
+
+<script type="text/javascript" src="../lib/DBinder.js"></script>
+<script type="text/javascript" src="../lib/LDebug.js"></script>
+
+<style>
+	.red{ color: red;}
+	.bold{ font-weight: bold;}
+
+	.red-bold{ color: red; font-weight: bold;}
+
+</style>
+
+
+<script type="text/javascript">
+// global 
+
+//
+function I_(id){
+	return document.getElementById(id)||null;
+}
+
+//
+document.addEventListener("DOMContentLoaded", function(){  //$(document).ready() 동일한 기능
+	L_("Load...");	
+	loadDebug();	
+
+	//
+	function loadDebug(){
+		
+		btnTest("[Data link경로변경]", (e)=>{
+			// Vue.data 에 접근 할수 있는 방법은?
+			L_(v_);  // v_로 받을 수 있음
+
+		});
+
+		//
+		let cnt = 0;
+		btnTest("[check]", (e)=>{
+			let el = I_("check01");
+			L_(el);
+		});
+
+		//
+		
+		
+	}
+});	
+
+
+</script>
+
+
+
+
+</head>
+
+<body>
+
+	<noscript>
+	<iframe src="../include/ns.html?id=DateTime" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+	</noscript>
+
+
+	<div id="wrap">
+		<div id="_DEBUG_"></div>
+	<div>
+
+	<div style="height:40px;"></div><hr/>
+
+	<div id= "app">
+		<div>
+			<!-- v-for -->
+			<div> <button @click="change">Click</button> || <button @click="add">add</button> || <button @click="del">del</button> </div>
+			<div v-for="(person, idx) in people" :key="person.name">		<!-- index를 사용해야 할 경우.  key 는 유니크한 값 설정--> 
+				[{{idx}}]{{ person.name}} : {{ person.age }}
+			</div>
+			
+
+			<div style="height:40px;"></div><hr/> 	<!-- v-for  객체를 사용할수 있음. 객체정보를 보기위한 부분 -->
+			<div v-for="(value, name, index) in testObj">
+				<div>[{{index}}]  {{name}}:{{value}} </div>
+			</div>
+			<button @click="callFunc">함수실행</button>
+
+		</div>
+
+
+		
+	</div> <!--//#app-->
+
+	
+
+
+<script>
+	//-----------------
+	// <template>
+	// v-for, index, key 속성 사용법
+	// 
+	// vue code
+	let count = 0;
+
+	const v_ = new Vue({
+		 el: "#app"
+
+		,data: {
+			people: [
+				{name: "1 AAAA", age:100}
+				,{name: "2 AAAA", age:10}
+				,{name: "3 AAAA", age:20}
+				,{name: "4 AAAA", age:30}
+			]
+
+			// 데이터에 함수 add
+			,testObj:{ name:"이름", addr:"Addr-100", call:"0001", callFuc: ()=>{return 100+20+30;} }  // data부분에 함수도 들어감.
+			
+		}
+
+		// event
+
+		// 실행메소드
+		,methods: {
+
+			change(){
+				++count;
+				this.people.push( {name: "Addd"+count, age:3333} );		
+			}
+
+			,add(){
+				// add
+				++count;
+				this.people.push( {name: "Addd"+count, age:3333} );	
+				L_( this.people );	
+			}
+
+			,del(){
+				// delete
+				++count;
+				let r = this.people.pop();		
+
+			}
+
+			,callFunc(){
+
+				let obj = this.testObj;
+				L_(obj);
+				
+				let pF = obj.callFuc; //
+				let r = pF(); 
+				L_(" @ r=" + r);  // 함수데이터도 가능함.
+			}
+			
+		}
+
+
+		// 캐싱함  method는 캐싱하지 않음.
+		,computed: {
+		
+
+		}
+
+		,watch: {
+			
+		}
+	
+	});
+
+</script>
+
+
+</body>
+</html>

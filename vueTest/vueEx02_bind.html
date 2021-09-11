@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-language" content="ko">
+<meta name="language" content="ko">
+<meta property="og:url" content="http://test.tst">
+<meta property="og:title" content="타이틀">
+<meta property="og:type" content="website">
+<meta property="og:description" content="테스트 홈피.">
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+<meta name="Author" content="">
+<meta name="copyright" content="(c)2021">
+<meta name="Robots" content="ALL">
+<meta name="keywords" content="키워드">
+<meta name="description" content="설명">
+<title></title>
+
+<link rel="stylesheet" type="text/css" href="../css/common.css">
+<script type="text/javascript" id="wiget" src="../as/load_as.js" async=""></script>
+
+<!--
+<script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+-->
+<script type="text/javascript" src="../js/vue.js"> </script>
+
+<script type="text/javascript" src="../lib/DBinder.js"></script>
+<script type="text/javascript" src="../lib/LDebug.js"></script>
+
+
+<script type="text/javascript">
+// global 
+
+function ID_(id){
+	return document.getElementById(id)||null;
+}
+
+//
+document.addEventListener("DOMContentLoaded", function(){  //$(document).ready() 동일한 기능
+	L_("Load...");	
+	loadDebug();	
+
+	//
+	function loadDebug(){
+		
+		btnTest("[Data link경로변경]", (e)=>{
+			// Vue.data 에 접근 할수 있는 방법은?
+			L_(v_);  // v_로 받을 수 있음
+
+		});
+
+		//
+		let cnt = 0;
+		btnTest("[input값변경]", (e)=>{
+			
+		});
+
+
+		// 값  mapping을 통한 함수형태 만들기.  eval() 함수를 대신해서 사용가능하다.
+		btnTest("문자실행함수", (e)=>{
+			const message1 = "abcde12345";
+
+			let txt = "{{message1.split('').reverse().join('')}}";		// message 값 접근이 안됨
+			txt = txt.replace("{{", "");
+			txt = txt.replace("}}", "");
+
+			let txt2 = "{{'abcde12345'.split('').reverse().join('')}}";  // 변수값 맵핑 함.
+			txt2 = txt2.replace("{{", "");
+			txt2 = txt2.replace("}}", "");
+
+			// new Function 을 이용한 문자열 실행 함수 만들기
+			let r = (new Function( "return " + txt2+ ";"))();	// (function anonymous( // anonymous 함수 생성됨
+																//	) {
+																//	return message1.split('').reverse().join(''); 
+																//	})
+			L_(r);
+		});
+		
+	}
+});	
+
+
+//
+function btnEvent(){
+	//alert("버튼 클릭!");
+	L_("[button]click@@@");
+
+}
+
+</script>
+
+
+
+
+</head>
+
+<body>
+
+	<noscript>
+	<iframe src="../include/ns.html?id=DateTime" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+	</noscript>
+
+
+	<div id="wrap">
+		<div id="_DEBUG_"></div>
+	<div>
+
+	<div style="height:40px;"></div><hr/>
+
+	<div>
+		<div id="_CHECK_">check 지역</div>
+	</div>
+	
+	<div id= "app">
+		<div>
+			<div>{{number+1}}</div>
+			<div>문자 뒤집기</div>
+			
+			<!--함수이용-->
+			<div>{{message.split('').reverse().join('')}}</div> 
+			
+
+			<hr/>
+			<!-- <div>{{reversedMessage()}}</div> -->  <!-- 아님 -->
+			<!-- computed -->
+			<!-- <div>{{ reversedMessage() }}</div> -->  <!-- method 에 함수가 있으면  reversedMessage() 인경우 함수표현이됨 -->
+			<div>{{ reversedMessage }}</div>  <!-- 아님 -->
+			<div>{{ reversedMessage }}</div>  <!-- 아님 -->
+			<div>{{ reversedMessage }}</div>  <!-- 아님 -->
+
+			<button @click="changeMessage">Click</button>
+		</div>
+
+		<div style="height:40px;"></div><hr/>
+		
+		<div>
+			
+		</div>
+
+	</div> <!--//#app-->
+
+	
+
+
+<script>
+	//-----------------
+	// vue code
+	let count = 0;
+
+	const v_ = new Vue({
+		 el: "#app"
+
+		// json
+		,data: {
+			 number: 1
+			,message: "abcdef12345"
+		}
+
+		// event
+
+		// 실행메소드
+		,methods: {
+			
+			//
+			/*
+			reversedMessage(){
+				++count;
+				L_( "call count=" + count );	// count 증가함.
+				return this.message.split('').reverse().join('');
+			}
+			*/
+
+			changeMessage(){
+				this.message = "코지코더";
+			}
+			
+		}
+
+
+		// 캐싱함  method는 캐싱하지 않음.
+		,computed: {
+			//
+			reversedMessage(){
+				++count;
+				L_( "call count=" + count );  // 한번 증가됨
+				return this.message.split('').reverse().join('');
+			}
+			
+			
+
+		}
+	})
+
+</script>
+
+
+</body>
+</html>

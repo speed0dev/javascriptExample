@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-language" content="ko">
+<meta name="language" content="ko">
+
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+
+
+<title></title>
+
+<link rel="stylesheet" type="text/css" href="../css/common.css">
+<script type="text/javascript" id="wiget" src="../as/load_as.js" async=""></script>
+
+<!--
+<script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+-->
+<script type="text/javascript" src="../js/vue.js"> </script>
+
+<script type="text/javascript" src="../lib/DBinder.js"></script>
+<script type="text/javascript" src="../lib/LDebug.js"></script>
+
+<style>
+	.red{ color: red;}
+	.bold{ font-weight: bold;}
+
+	.red-bold{ color: red; font-weight: bold;}
+
+</style>
+
+
+<script type="text/javascript">
+// global 
+
+//
+function ID_(id){
+	return document.getElementById(id)||null;
+}
+
+//
+document.addEventListener("DOMContentLoaded", function(){  //$(document).ready() 동일한 기능
+	L_("Load...");	
+	loadDebug();	
+
+	//
+	function loadDebug(){
+		
+		btnTest("[Data link경로변경]", (e)=>{
+			// Vue.data 에 접근 할수 있는 방법은?
+			L_(v_);  // v_로 받을 수 있음
+
+		});
+
+		//
+		let cnt = 0;
+		btnTest("[input값변경]", (e)=>{
+			
+		});
+
+		//
+		
+		
+	}
+});	
+
+
+</script>
+
+
+
+
+</head>
+
+<body>
+
+	<noscript>
+	<iframe src="../include/ns.html?id=DateTime" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+	</noscript>
+
+
+	<div id="wrap">
+		<div id="_DEBUG_"></div>
+	<div>
+
+	<div style="height:40px;"></div><hr/>
+
+	
+	<div id= "app">
+		<div>
+			<div :class="{ red:isRed, bold:isBold }"> Hello </div>
+			<button @click="changeStyle">Click</button>
+		</div>
+
+		<div style="height:40px;"></div><hr/>
+		<div>
+			
+		</div>
+
+		<div style="height:40px;"></div><hr/>
+		<div>
+			<div :class="{ 'red-bold':rb }"> Hello </div> <!-- red-bold -있는경우 ''로 묶어줘야함. -->
+			<button @click="changeMulti">Click</button>	
+		</div>
+
+		<div style="height:40px;"></div><hr/> <!-- style 적용 -->
+		<div>
+			<div :style="{color:rStyle.red, fontSize:rStyle.size}" >문자입니다.</div>  <!-- style 적용방법 -->
+		</div>
+
+
+	</div> <!--//#app-->
+
+	
+
+
+<script>
+	//-----------------
+	// class style
+	//
+	// vue code
+	let count = 0;
+
+	const v_ = new Vue({
+		 el: "#app"
+
+		,data: {
+			isRed: false
+			,isBold: false
+			,rb :false
+
+
+			,rStyle:{
+				red: "red"
+				,size: "30px"
+			}
+		}
+
+		// event
+
+		// 실행메소드
+		,methods: {
+			
+			changeStyle(){
+				L_(this.isRed);
+				this.isRed = !this.isRed;
+				this.isBold = !this.isBold;
+			}
+
+			,changeMulti(){
+				this.rb = !this.rb;
+				L_("rb:" + this.rb);
+
+			}
+			
+		}
+
+
+		// 캐싱함  method는 캐싱하지 않음.
+		,computed: {
+			//
+			reversedMessage(){
+				++count;
+				L_( "call count=" + count );  // 한번 증가됨
+				
+			}
+
+		}
+
+		,watch: {
+			message(newVal, oldVal){
+				
+		
+			}
+
+		}
+	
+	});
+
+</script>
+
+
+</body>
+</html>

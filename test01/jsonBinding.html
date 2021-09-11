@@ -229,6 +229,8 @@ document.addEventListener("DOMContentLoaded", function(){  //$(document).ready()
 		});
 
 
+
+		//
 		btnTest("[jsonData]Bind", (e)=>{
 			//
 			let jData = {name:"AAAA", age:10, value:1203333, info:"한글", rVar:12.3456 };
@@ -299,6 +301,74 @@ document.addEventListener("DOMContentLoaded", function(){  //$(document).ready()
 
 		</div>
 	</div>
+
+
+
+
+	<!-- json data -->
+	<div>여기서 표시 되면 안됨</div>
+	<div id="bind-tag">
+		<div>
+			
+
+			<div> {{data.value}} </div>
+			<div>{{number+1}}</div>
+			<div>{{String}}</div>
+			<div>{{method()}}</div>
+			<div>{{methodNew( {{number+100}} )}}</div>
+
+
+			<template>
+				<div>01 AAAA</div>
+				<div>02 AAAA</div>
+				<div>03 AAAA</div>
+				<div>04 AAAA</div>
+			</template>
+
+			
+			
+			<div v-if="number === 1" >
+
+			</div>
+			
+			<div v-if-else="number === 2">
+
+			</div>
+			<div v-else >
+
+			</div>
+			
+
+
+			<div v-show="bShow" >
+			</div>
+
+
+
+			<div id="" v-for="(item, index) in datas" :key="keyCode" >
+				<div>
+					<div>{{index}}  {{item.name}} {{item.age}} {{expressFunc(item.name, item.keyCode)}}</div>
+				</div>	
+			</div>
+
+
+			<input type="text" v-bind:value="name"  />
+
+			<input type="text" :="name" />
+
+			<input type="text" :on="click" />
+
+			<input type="text" :on-click="click" />
+
+			<input type="text" @click="click" />
+
+
+			<div :class="{bClass: bBool}" :style="{ red: rRed }"> </div>
+
+		</div>
+	</div>
+	<!--// json data -->
+
 
 
 	<hr/>

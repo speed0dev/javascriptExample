@@ -11,6 +11,6 @@ Node.ownerDocument
 
 https://developer.mozilla.org/ko/docs/Web/API/Node/ownerDocument
 
-
+[ownderDocument]("https://developer.mozilla.org/ko/docs/Web/API/Node/ownerDocument" target="_blank)
 
 

@@ -30,7 +30,8 @@
 
 // json Data binding
 
-
+// for  객체이름 변경
+// DataBinder
 const DBinder = (()=>{
 	
 	//const doc_ = document;
@@ -52,7 +53,6 @@ const DBinder = (()=>{
 	
 	
 	// test
-
 	let dataObj = {aaa: "AAAA", bbb: "bbbb", ccc: "cccc", ddd: "dddd"};
 
 	//
@@ -72,8 +72,9 @@ const DBinder = (()=>{
 	}
 
 
-	//
 	// attr 중 data-for 를 갯수만큼 생성 해주는 기능
+	// 1. data-bind-for 갯수만큼 앞에추가
+	// 2. 복사대상은 마지막에 제거
 	function searchDataFor_(idx, node, level, data){
 			
 		//
@@ -87,7 +88,7 @@ const DBinder = (()=>{
 
 		if(node.hasAttribute("data-bind-for")){
 
-			//
+			// data-for //접근불가
 			let forData = node.getAttribute("data-bind-for");
 			L_(forData);
 
@@ -98,21 +99,23 @@ const DBinder = (()=>{
 			
 			let newNode = null;
 			
-			
 			// 생성
 			for(let ii=0;ii<5;ii++){		//test
 				newNode = node.cloneNode(true);  // deep copy
-				newNode.removeAttribute("data-bind-for");		//
+				newNode.removeAttribute("id");
+				newNode.removeAttribute("name");
 
+				newNode.removeAttribute("data-bind-for");		//
 				newNode.setAttribute("data-bind-idx", ii);
 				newNode.setAttribute("data-bind-item", dataObj);  //obj 들어갈수 있는가??? - 안됨.
-				node.parentNode.append(newNode);		//	
+
+				node.parentNode.insertBefore(newNode, node);		// 바로앞에 추가	
 			}
+
 			node.remove();
 		}
 
 		
-
 		if(node.hasChildNodes()){  // has Child가 있으면
 			let level_ = level+1;
 			for(let j=0;j<node.childNodes.length;j++){
@@ -135,9 +138,11 @@ const DBinder = (()=>{
 
 })();
 
+// Bind comp end
 
 
 
+const doc_ = document;
 //
 document.addEventListener("DOMContentLoaded", function(){  //$(document).ready() 동일한 기능
 	L_("Load...");
@@ -162,6 +167,63 @@ document.addEventListener("DOMContentLoaded", function(){  //$(document).ready()
 			let r = {aa:"aaaa"};
 			L_(r
 			);
+
+		});
+
+
+		let count = 0;
+		btnTest("[div]중간생성", (e)=>{
+			//let doc_ = document.getElementById;  // 접근불가 ?
+
+			L_(doc_.getElementById);
+
+			let middle = doc_.getElementById("middle");
+
+			let node = middle;
+			L_(node);
+
+			//같은형태 만들기
+			let newNode = node.cloneNode(true);
+			node.append(newNode); //
+			newNode.removeAttribute("id");		// attribute 속성부분을 옮겨갈수 있음.
+			newNode.innerHTML = "<span>{{" + count + "}}</span>";
+			++count;
+			//
+
+		});
+
+		
+		//insertBefore,  insertAfter
+		let rCount = 0;
+		btnTest("[같은레벨 앞에추가]", (e)=>{
+			//let doc_ = document.getElementById;  // 접근불가 ?
+
+			L_(doc_.getElementById);
+
+			let middle = doc_.getElementById("middle");
+
+			let node = middle;
+			L_(node);
+
+			//같은형태 만들기
+			let newNode = node.cloneNode(true);
+			newNode.removeAttribute("id");		//id제거  attribute 속성부분을 옮겨갈수 있음. 
+
+			
+			newNode.innerHTML = "<span>{{" + rCount + "}}</span>";
+			++rCount;
+
+			//
+			let parent = node.parentNode;
+			//parent.insertAfter(newNode, node);  // (new, preSibling) insertAfter 함수 없음
+			parent.insertBefore(newNode, node);
+
+		});
+
+
+		btnTest("[middle]제거", (e)=>{
+			
+			let middle = doc_.getElementById("middle");
 
 		});
 		
@@ -194,9 +256,25 @@ document.addEventListener("DOMContentLoaded", function(){  //$(document).ready()
 
 	<div id="addDiv">
 		<div>
-			<span data-bind-for="data.code.list" href="#">{{T1}}</span>[]
+			[A][B]<span data-bind-for="data.code.list" href="#">{{T1}}</span>[C][D]
 		</div>
 	</div>
+
+	<div>
+		<div>first</div>
+		<div id="middle">second</div> <!-- 10 개를 만들어야함 -->
+		<div>3</div>
+		<div>4</div>
+		<div>5</div>
+	</div>
+
+	<div>
+		<div>JSON data bind</div>
+
+	</div>
+
+
+	<hr/>
 
 
 </body>

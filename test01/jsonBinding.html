@@ -250,7 +250,82 @@ document.addEventListener("DOMContentLoaded", function(){  //$(document).ready()
 
 			
 		});
+
+
+
+		btnTest("dataMethodCall", (e)=>{
+
+			// https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/typeof
+			// typeof 확인
+			function paramType(s){
+				if(typeof s ==='string'){
+					return "'" + s + "'";
+				}
+
+				return s;
+			}
+
+			let text = " {{ number + 1 + executeA(10) }}";  // 이런형식으로 변환 => "  rData.data.number + 1 + rData.methods.executeA( rData.data.numberStr )   "
+
+
+			let rData = {
+				data: {
+					number : 1
+					,next: 100
+					, numberStr : "F10"		// string
+				}
+				,methods: {
+					executeA: function(a){
+						return a + a;	
+					}
+
+					, callF: function(){
+						return "@callF@";
+					}
+				}
+			}
+
+			let exp = text.replace("{{", "");
+			exp = exp.replace("}}", "");
+			L_(exp);
+
+			L_(" text 함수실행");
+			let rr = (new Function( "return '" + rData.data.numberStr +  "' + " + rData.methods.executeA(10)  + " ;"))(); //string
+			L_( "1 rr=" + rr );
+
+			//
+			rr = (new Function( "return " + rData.data.number +  " + " + rData.methods.executeA(10)  + " ;"))();	//number
+
+			L_( "2 rr=" + rr );
+
+
+			// 실행메소드 영역
+			rr = (new Function( "return '" + rData.methods.executeA(rData.data.numberStr  ) + "' ;" ))();
+			L_("3 rr=" + rr);
+
+
+			//final
+			// let expStr = " rData.data.number + 1 + rData.methods.executeA( rData.data.numberStr ); ";
+
+			// text method 실행방법
+
+			// var multiply = new Function('x', 'y', 'return x * y');
+			// 
+	
+			
+			let expStr = " L_(arguments) ; L_(arguments[0]);  return rData.data.number + 1 + rData.methods.executeA(rData.data.numberStr); ";
+			
+			// https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Functions
+			// 실행파라미터 결정
+			rr = (new Function( 'rData',  expStr ))(rData);  // ==>// (function anonymous(aaa,bbb){
+			L_("@4 rr=" + rr );
+
+
+
+		});
 		
+
+
 	}
 
 });	

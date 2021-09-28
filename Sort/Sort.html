@@ -13,13 +13,262 @@
 </style>
 
 <script src="../js/jquery-3.4.1.min.js"></script>
-<script src="../lib/Debug_.js"></script>      
+<script src="../lib/LDebug.js"></script>      
 
 
 <script>
 $(document).ready(()=>{
 	
+
+
+	//
+	const ArraySort = (function(){
+
+		function compare_(a, b, ord){
+			if(ord==1){
+				if(typeof a === "string"){
+					return a.toString().localeCompare(b.toString());	
+				}else{
+					return a-b;
+				}
+			}else{
+				if(typeof a === "string"){
+					return b.toString().localeCompare(a.toString());	
+				}else{
+					return b-a;
+				}
+			}
+
+		}
+
+		function sort_(arr, name, ord, copy){
+			let arr_ = null;
+
+			if(copy){
+				arr_ = $.extend([], arr);
+			}else{
+				arr_ = arr;
+			}
+			
+			let ord_ = ord;
+			arr_.sort( function(a,b){
+				
+				return compare_(a[name], b[name], ord_);
+			});
+			
+			return arr_;
+
+		}
+
+
+		return {
+			ord: function(arr, name){
+				return sort_(arr, name, 1, false);
+			}
+
+			,ordDes: function(arr, name){
+				return sort_(arr, name, -1, false);
+			}
+
+			,ordClone: function(arr, name){
+				return sort_(arr, name, 1, true);
+			}
+			,ordDesClone: function(arr, name){
+				return sort_(arr, name, -1, true);
+			}
+
+		}
+	})();
+
+
+
+
+
+
+
+	// javascript 속도 측정 가능 여부
+
+	// 다건 sort 여부 
+	btnTest("Sort", (e)=>{
+		L_(e);
+		
+
+		let data = [
+			 {name: "Aaaa1", price:12.03, ord:"01", arrList:[ {AAA: 100, BBB: 100, CCC: 34}]}
+			,{name: "aaaa1", price:12.03, ord:"01"}
+			,{name: "acca2", price:120.03, ord:"02"}
+			,{name: "abbaaa", price:220.03, ord:"01"}
+			,{name: "aDaaa", price:3.03, ord:"05"}
+			,{name: "aCaaa", price:42.03, ord:"03"}
+			,{name: "aBaaa", price:52.03, ord:"04"}
+			,{name: "aaaa3", price:62.03, ord:"05"}
+		];
+
+
+		// 접근가능한가?
+		L_( ArraySort.sort_); // undefined
+
+		let rArr = ArraySort.ord(data, "name");
+		L_(rArr);
+		L_("----------------------------------");
+
+		let rArr2 = ArraySort.ord(data, "ord");
+		L_(rArr2);
+		L_("----------------------------------");
+
+		let rArr3 = ArraySort.ordDes(data, "price");
+		L_(rArr3);
+		L_("----------------------------------");
+
+		let rArr4 = ArraySort.ordClone(data, "ord");
+		L_(rArr4);
+		L_("----------------------------------");
+
+	});
+
 	
+	//----------------------
+	//DeepCopy
+	// 확인 테스트 할것..
+
+	const DeepCopy = (function(){
+
+		function typeOf(val){
+			return typeof val;
+		}
+
+		function isPlainObject(val){
+			if(typeof val === "object"){
+				return true;
+			}
+			return false;
+		}
+
+		function cloneDeep(val, instanceClone) {		// 외부호출용
+
+			switch (typeOf(val)) {
+				case 'object':
+					return cloneObjectDeep(val, instanceClone);
+				case 'array':
+					return cloneArrayDeep(val, instanceClone);
+				default: {
+					//return clone(val);
+					return val;
+				}
+			}
+		}
+
+		//
+		function cloneObjectDeep(val, instanceClone) {
+			
+			if (typeof instanceClone === 'function') {
+				return instanceClone(val);
+			}
+			
+			if (instanceClone || isPlainObject(val)) {
+				const res = new val.constructor();
+				for (let key in val) {
+					res[key] = cloneDeep(val[key], instanceClone);
+				}
+				return res;
+			}
+			return val;
+		}
+
+		//
+		function cloneArrayDeep(val, instanceClone) {
+			const res = new val.constructor(val.length);
+			for (let i = 0; i < val.length; i++) {
+				res[i] = cloneDeep(val[i], instanceClone);
+			}
+			return res;
+		}
+
+		return {
+			clone: function(val){
+				return cloneDeep(val);
+			}
+
+		}
+
+	})();
+
+
+
+	btnTest("deepCopy", (e)=>{
+
+		const a = [{ 'a': 0 }, { 'b': 1 }];
+    	const b = DeepCopy.clone(a);
+		L_("01==================");		
+		L_(b);
+
+		const val1 = [0, 'zz', {}, [{}], [function() {}], function() {}];
+		L_("02==================");		
+		const val2 = DeepCopy.clone(val1);
+		val2[0] = 10000;
+		val2[1] = 'AAAA';
+		val2[4] = function(e){};
+		L_( val1 );
+		L_( val2 );
+
+		L_("---------------------------");
+		const fixture = [ [{aa: 'b'}], [{bb: 'b'}] ];
+		const result = DeepCopy.clone(fixture);
+
+		L_(fixture);
+		L_(result);
+		L_("=============================");
+
+		const resultPart = DeepCopy.clone(fixture[1]);
+		L_(resultPart);
+		L_("=============================");
+
+		const r = DeepCopy.clone({a: {a: 1, b: 2, c: 3 }, b: {a: 1, b: 2, c: 3 }, c: {a: 1, b: 2, c: 3 } });
+		L_(r);
+		L_("=============================");
+
+		//
+		function A(x, y, z) {
+			this.x = x;
+			this.y = y;
+			this.z = z;
+		}
+
+		function B(x) {
+			this.x = x;
+		}
+
+    	const a1 = new A({x: 11, y: 12, z: () => 'z'}, new B(2), 7);
+    	const b1 = DeepCopy.clone(a1);
+
+		L_(a1);
+    	L_(b1);
+		L_("=============================");
+
+
+		//const a = new Set([2, 1, 3]);
+    	//const b = DeepCopy.clone(a);
+
+/*
+		function MyClass(id) {
+			this._id = id;
+		}
+
+		const src = {
+			myClasses: [
+				new MyClass(1),
+				new MyClass(2),
+				new MyClass(3)
+			]
+		};
+		L_(src);
+*/
+
+
+	});
+
+
+
 	//
 
 	btnTest("AAAA", (e)=>{
@@ -31,7 +280,7 @@ $(document).ready(()=>{
 		serDatas("", 20);
 	});
 
-	// �����
+	// �����
 	function srialNumber(a, b){
 		let depth = b-a;
 		let rData = {};
@@ -79,7 +328,10 @@ $(document).ready(()=>{
 <body class="">
     <div class=""> Test
 		<div id="_DEBUG_"></div>
-
+		
+		<div>DATA Sort</div>
+		<div>데이타  sort 구현 방식</div>
+		<div>===============</div>
 
 	</div>
 </body>

@@ -1,9 +1,9 @@
 # javascriptExample
 
-LDebug 콘솔용 로그 
 
-Log에서 특정값 찾기?
+Log에서 특정값 찾기
 
+소스압축여부
 
 MDN Web Docs
  > WebAPI > Node > Node.ownerDocument

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-language" content="ko">
+<meta name="language" content="ko">
+<meta property="og:url" content="http://test.tst">
+<meta property="og:title" content="타이틀">
+<meta property="og:type" content="website">
+<meta property="og:description" content="javascript Dev.">
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+<meta name="Author" content="">
+<meta name="copyright" content="(c)2021">
+<meta name="Robots" content="ALL">
+<meta name="keywords" content="키워드">
+<meta name="description" content="설명">
+<title></title>
+
+<link rel="stylesheet" type="text/css" href="../css/common.css">
+<script type="text/javascript" id="wiget" src="../as/load_as.js" async=""></script>
+
+
+<script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="../lib/LDebug.js"></script>
+
+<script type="text/javascript">
+
+// 함수 이름 가져오기
+//https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Function/name
+
+
+
+
+
+//---------------------------------
+// singleTon 으로 구성 할 것.
+const gInsInit = (function(){
+	
+	const inner_ = {data: null};
+
+	let count_ = 0;
+	let callMaxCnt_ = 0;
+
+	function reset_(cnt, data){
+		callMaxCnt_ = cnt;
+		inner_.data = data;
+		count_ = 0;
+	}
+
+	function get_(){
+
+		++count_;
+		//L_( " %cget_() count_=" + count_  + " max:" + callMaxCnt_ , "color:red");
+
+		const sendData = inner_.data||null;
+		if( count_ >= callMaxCnt_ ){
+			delete inner_.data;
+			inner_.data = null;
+		}
+		return sendData;
+	}
+
+	return{
+
+		get: function(){
+			return get_();
+		}
+
+		,reset: function(cnt, data){
+			reset_(cnt, data);
+		}
+	}
+
+})();
+
+//------------------------------
+// 상속여부 어떻게??
+const LMapper = (function(){
+
+
+})();
+
+
+
+// 
+$(document).ready(function(){
+
+	L_( "[jquery] ready() 01" );
+
+	//-----------------
+	// Mapper 
+	const gData = { 
+		client:[
+			{fList: {}}, {fList: {}}, {fList: {}} 
+		], 
+		data:{AAAA:100, BBB:333, text:"XXXXXXXXXXXXXXX"} 
+	};
+
+	
+	L_("------------------------------");
+	//L_(gInsInit.reset);
+
+	// 1첫번째 호출 <== 초기화시 몇번더 호출 할것인가?
+	gInsInit.reset( 3, gData);	//
+
+	L_("01 END =======================");
+
+});
+
+
+
+
+//
+document.addEventListener("DOMContentLoaded", function(){  //$(document).ready() 동일한 기능
+	L_("Load...");
+	
+	loadDebug();	
+
+
+	//
+	function loadDebug(){
+
+		btnTest("[함수이름]", (e)=>{
+
+			function fffName(){
+
+			}
+
+			let fp = fffName;
+
+			let pObj = { ff:{}, dd:function(aa){ 
+					return aa; 
+				} 
+			};
+
+			const RR = function(){
+				
+				//
+				return {
+
+				}
+			};
+
+			let pRR = RR;
+
+			L_("================");
+			L_(" functionName:" + fp.name);
+			L_( " pObj.dd.name:" + pObj.dd.name );
+			L_( " RR.name:" + RR.name );
+
+
+			// ES6 함수를 구현한 브라우저
+			var f = function() {};
+			L_( "f.name:" + f.name );
+			
+
+
+
+			// function 식에서 이름으로 함수를 정의할 수 있습니다:
+			let object = {
+				someMethod: function object_someMethod() {}		//
+			};
+			L_(object.someMethod.name); // logs "object_someMethod"
+			L_("================");
+
+			// 함수 이름은 바꿀 수 없습니다, 이 속성은 읽기 전용입니다:
+			var object2 = {
+				// 익명
+				someMethod: function() {}
+			};
+
+			object2.someMethod.name = 'someMethod';
+			L_(object2.someMethod.name); // 빈 문자열, someMethod는 익명
+			L_(" object.name:" + object2.name);
+			L_("================");
+
+
+			// class 개념으로 사용
+			function a() {}
+			var b = new a();	// constr
+			L_(" b.name: " + b.name);  // undefined
+			L_(" b.constructor.name: " + b.constructor.name); // logs "a"
+			L_("================");
+
+		});
+
+		//
+		btnTest("[ObjectName]", (e)=>{
+			let pObj = {};
+			L_( "pObj.name: " + pObj.name );
+
+			pObj = new Object();
+			L_( "pObj.name: " + pObj.name );
+
+			pObj = function AAA(){		////
+
+			}
+			L_( "pObj.name: " + pObj.name );
+
+			pObj = function(a, b, c){	///
+				return a+b;
+			}
+			L_( "pObj.name: " + pObj.name );
+
+			pObj = (function(a){
+				return {data: "AAAA"};
+			})();
+			L_( "pObj.name: " + pObj.name );
+
+		});
+
+		btnTest("[func요소확인]", (e)=>{
+			//
+			function callF_(aa){
+				//
+				return aa;
+
+			}
+			L_(callF_.bind);
+			L_(callF_.call);
+			L_(callF_.length);
+			L_(callF_.name);
+			L_(callF_.prototype);
+			L_(callF_.toString);
+		});
+
+
+		//
+		btnTest("[innerFunc변경]", (e)=>{
+			L_("--------------------------------------");
+			// 수정가능과 수정불능상태
+			const FF = (function(){
+
+				function caller_(){
+					let code = 100;
+					let code2 = 200;
+
+					let code333 = 400;
+					L_("내용확인가능");
+					L_(" caller_() 호출");
+					L_(">>>>>>>>>>>>>>>>>>>>>>>>>>");
+				}
+
+				return{
+					exec: caller_				/// 내용 노출 
+					,exec2: function(){			//// 노출 안됨
+						caller_();
+					}
+				}
+
+			})();
+
+			FF.exec();
+			L_("=======================================");
+
+			let tmpFF = FF.exec;
+			let tmpFF2 = FF.exec2;
+
+			L_("--------------------------------");
+			L_(tmpFF);	// 노출 가능
+			L_("--------------------------------");
+			L_(tmpFF2);	// 노출여부 확인
+			L_("--------------------------------");
+
+			FF.exec = function(){
+				L_("@@@@@ 추가 변경부분 001 ...");
+				L_(" tmpFF2.name:" + tmpFF2.name);
+				tmpFF2();
+				L_("@@@@@ 추가 변경부분 002 ...");
+			}
+
+			FF.exec();
+			L_("=======================================");
+
+		});
+
+		const G_ = console.group;
+		const GE_ = console.groupEnd;
+		// G_(); console.group
+		// L_();
+		// T_(); console.table;
+		// console 로그 사용법
+		// https://ponyozzang.tistory.com/271
+		// https://www.bennadel.com/blog/3941-styling-console-log-output-formatting-with-css.htm
+		//
+		btnTest("[log group]" , (e)=>{
+			console.group("part01");
+			L_("AAAAAAAAAAAAA");
+			L_("AAAAAAAAAAAAA");
+			L_("AAAAAAAAAAAAA");
+			L_("AAAAAAAAAAAAA");
+			console.groupEnd();
+
+			G_("분석부분");
+			L_("확인값 측정");
+			GE_();
+
+			L_(
+				"%cAltering the text color",
+				"color: #ff0000"
+			);
+			
+			let pObj = function(a){
+				return a;
+			};
+			let data = {AAA: 100, BBB:300, str:"sdfsdfsdf", part:"KSC-001" };
+
+			L_("%c[Check]==============", "color:#ff00ff");
+			L_("%cBlue! %cGreen", "color: blue; font-size:15px;", "color: green; font-size:12px;");
+			L_(data);
+			L_(data);
+
+			let data2 = {AAA: 4000, BBB:300, str:"sdfsdfsdf", part:"KSC-001" };
+			L_(data2);
+
+
+		});
+
+		btnTest("[log group]" , (e)=>{
+			L_("-----------------------");
+			let temp = {AAA: 88000, BBB:300, str:"sdfsdfsdf", part:"KSC-001" };
+			L_(temp);
+			L_("-----------------------");
+		});
+
+		btnTest("[Test01]", (e)=>{
+			L_(e);
+			L_("test 0001");
+		});
+
+		btnTest("[Test02]", (e)=>{
+			L_("test 00002");
+		});
+		
+		//
+		btnTest("[Check]", (e)=>{
+			L_("check 0001");
+		}, "_CHECK_");
+	
+		
+		btnTest("[Check]", (e)=>{
+			L_("check 0001");
+		}, "_CHECK");
+	
+	}
+
+
+});	
+
+//-------------------------------------------------------
+// document loading
+// 일반초기화
+(function(doc){
+	//L_("::init");
+
+	doc.addEventListener("DOMContentLoaded", function(){
+		L_( " load part2" );
+
+		// Event 2번
+		let button = doc.getElementById("btnTest");
+		button.addEventListener("click", function(e){
+			L_("0000000000000 1");
+
+		});
+
+		button.addEventListener("click", function(e){
+			L_("0000000000000 2");
+
+		});
+
+
+		//
+
+
+	});
+
+})(document);
+
+
+
+//
+$(document).ready(function(){
+	L_( "[jquery] ready() 01" );
+
+	const gData = gInsInit.get();
+	
+	console.group("01");
+	L_(gData);
+	console.groupEnd();
+
+	const Id = "Part01";
+
+	function init(){
+		L_(" init()");
+		L_(Id);
+
+	}
+
+	function load(){
+		L_(" load()");
+		L_(Id);
+
+	}
+
+	function act(){
+		L_(" act()");
+		L_(Id);
+
+	}
+
+
+	btnTest("Zone1", (e)=>{
+		//
+		L_("Zone1");
+		L_(gData);
+		gData.client["id_01"] = {
+			//메소드 리스트
+			 init: init
+			,load: load
+			,act: act
+		};
+
+	}, "_ZONE1");
+
+
+});
+
+
+
+$(document).ready(function(){
+	L_( "[jquery] ready() 02" );
+	const gData = gInsInit.get();
+	
+	console.group("02");
+	L_(gData);
+	console.groupEnd();
+
+	btnTest("Zone2", (e)=>{
+		//
+		L_("Zone2");
+		L_(gData);
+
+	}, "_ZONE2");
+
+
+});
+
+
+
+$(document).ready(function(){
+	L_( "[jquery] ready() 03" );
+	const gData = gInsInit.get();
+	
+	console.group("03");
+	L_(gData);
+	console.groupEnd();
+
+	btnTest("Zone3", (e)=>{
+		//
+		L_("Zone3");
+		L_(gData);
+
+		gData.data = { code: "신규생성" };  // notify
+
+
+	}, "_ZONE3");
+
+
+
+});
+
+
+$(document).ready(function(){
+	L_( "[jquery] ready() 04" );
+	const gData = gInsInit.get();
+	
+	console.group("04");
+	L_(gData);
+	console.groupEnd();
+
+	btnTest("Zone4", (e)=>{
+		//
+		L_("Zone4");
+		L_(gData);
+
+	}, "_ZONE4");
+
+});
+
+$(document).ready(function(){
+	L_( "[jquery] ready() 05" );
+	const gData = gInsInit.get();
+	
+	console.group("05");
+	L_(gData);
+	console.groupEnd();
+
+	btnTest("Zone5", (e)=>{
+		//
+		L_("Zone5");
+		L_(gData);
+
+	}, "_ZONE5");
+
+});
+
+</script>
+
+
+</head>
+
+
+<body>
+
+
+	<noscript>
+	<iframe src="../include/ns.html?id=DateTime" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+	</noscript>
+
+
+	<div id="wrap">
+		<div id="_DEBUG_"></div>
+	<div>
+
+	<hr/>
+
+	
+	<div>
+		<div id="_CHECK_">check 지역</div>
+	</div>
+	
+	<div>
+		<div><button id="btnTest">버튼</button></div>
+	</div>
+
+
+
+	<div>
+		
+		<div id="_ZONE1"></div>
+		<div id="_ZONE2"></div>
+		<div id="_ZONE3"></div>
+		<div id="_ZONE4"></div>
+
+	</div>
+
+
+
+</body>
+</html>

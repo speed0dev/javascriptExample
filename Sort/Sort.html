@@ -197,6 +197,8 @@ $(document).ready(()=>{
 
 	btnTest("deepCopy", (e)=>{
 
+		console.time("test");		//<--
+
 		const a = [{ 'a': 0 }, { 'b': 1 }];
     	const b = DeepCopy.clone(a);
 		L_("01==================");		
@@ -263,6 +265,7 @@ $(document).ready(()=>{
 		};
 		L_(src);
 */
+		console.timeEnd("test"); //<--
 
 
 	});

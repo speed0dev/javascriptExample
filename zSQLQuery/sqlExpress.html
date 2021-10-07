@@ -254,6 +254,31 @@ $(document).ready( ()=>{
 
 		});
 
+		btnTest("카멜표기", (e)=>{
+
+			/*
+			function toUnderScore(str){
+				//const exp = new RegExp("[A-Z]");
+				return str.replace(/[A-Z]/g, function(up, i, st){
+
+				})
+			}
+			*/
+
+			//
+			const  under2camel = function(str){
+				//
+				return str.toLowerCase().replace(/(\_[a-z])/g, function(arg){
+					L_(arg); // _c, _a
+					return arg.toUpperCase().replace('_','');
+				});
+			};
+
+
+			L_( under2camel("TEST_CODE_AAAA") );
+
+		});
+
 	}
 
 });

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-language" content="ko">
+<meta name="language" content="ko">
+<meta property="og:url" content="http://test.tst">
+<meta property="og:title" content="타이틀">
+<meta property="og:type" content="website">
+<meta property="og:description" content="테스트 홈피.">
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+<meta name="Author" content="">
+<meta name="copyright" content="(c)2021">
+<meta name="Robots" content="ALL">
+<meta name="keywords" content="키워드">
+<meta name="description" content="설명">
+<title></title>
+
+<link rel="stylesheet" type="text/css" href="../css/common.css">
+<script type="text/javascript" id="wiget" src="../as/load_as.js" async=""></script>
+
+
+<script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+
+<script type="text/javascript" src="../lib/Lcommon.js"></script>
+<script type="text/javascript" src="../lib/LDebug.js"></script>
+
+
+<script type="text/javascript">
+
+//
+document.addEventListener("DOMContentLoaded", function(){  //$(document).ready() 동일한 기능
+	L_("Load...");
+	
+	loadDebug();	
+
+
+	//
+	function loadDebug(){
+		
+		btnTest("Test01", (e)=>{
+			L_(e);
+			L_("test 0001");
+		});
+
+		btnTest("Test02", (e)=>{
+			L_("test 00002");
+		});
+		
+		//
+		btnTest("Check", (e)=>{
+			L_("check 0001");
+		}, "_CHECK_");
+	
+		
+		btnTest("Check", (e)=>{
+			L_("check 0001");
+		}, "_CHECK");
+	
+	}
+});	
+
+
+// tag <-- Excel load
+const colNames= `
+SEQ1
+USER2
+USERNAME3
+USER_CODE_INFO4
+CEHKNAME5
+PART6
+DDDD
+AAAA
+CODENAME
+CODE_INFO
+TEST
+DDDFF
+DDFFDD
+USER 
+AA_DFD
+RES_ESE
+REG_DATE
+CRE_DATE	
+`
+;
+
+const colTypes= `
+number
+number
+string
+string
+number
+string6
+string
+string
+string
+string
+number
+string
+string
+number
+string
+number
+date
+date
+`
+;
+
+
+const colVals= `
+1
+2
+3
+4
+2020-10-11
+1000
+20000
+4000
+`
+;
+
+
+
+
+
+$(document).ready( ()=>{
+
+
+
+	//----------------------------------------
+	// ? convert Values
+
+	const SqlQuery = function(name){
+		const tName_ = name;
+
+		// colName, colVal, colType
+		const tableMeta = [];
+
+		function addColName_(name){
+
+			tableMeta.push( {colName: name, colVal:null, colType:null } );
+		}
+
+		function clear_(){
+
+
+		}
+
+		//
+		function getSql_(){
+
+			let result = "";
+			if(!isNull(tableMeta)){
+				for(let i=0;i<tableMeta.length;i++){
+
+					// number
+					if(tableMeta[i].colType === "number"){ 
+						result += (tableMeta[i].colVal + " AS " + tableMeta[i].colName)
+					}else{ // string etc
+						result += ( "'" + tableMeta[i].colVal + "' AS " + tableMeta[i].colName)
+					}
+					if(i < (tableMeta.length-1)){
+						result += ", ";
+					}else{
+						result += " ";
+					}
+				}
+			}
+
+			return result;
+
+		}
+
+
+		//
+		function make_(str, type){
+			//
+			const partList = str.split("\n");
+			L_( " len=" + partList.length );
+
+			if(!isNull(partList)){
+				let tmpNm = "";
+				let idx = 0;
+				for(let i=0;i<partList.length;i++){
+					// string
+					tmpNm = partList[i].trim();
+					L_( "["+i+"]" + tmpNm);
+
+					if(isNull(tmpNm)){
+						continue;
+					}
+
+					if( isNull(tableMeta[idx]) ){
+						if(type === "colName"){
+							tableMeta.push( {colName: tmpNm, colVal:null, colType:null } );
+						}else if( type === "colType" ){
+							tableMeta.push( {colName: null, colVal:tmpNm, colType:null } );
+						}else if(type === "colVal" ){
+							tableMeta.push( {colName: null, colVal:null, colType:tmpNm } );
+						}
+
+					}else{
+						if(type === "colName"){
+							tableMeta[idx].colName = tmpNm;
+						}else if( type === "colType" ){
+							tableMeta[idx].colType = tmpNm;
+						}else if(type === "colVal" ){
+							tableMeta[idx].colVal = tmpNm;
+						}
+					}
+					++idx;
+				}
+			}
+		}
+
+		return{
+			make: function(str, type){
+				make_(str, type);
+
+			}
+			,getSql: function(){
+				return getSql_();
+			}
+			,showInfo: function(){
+				return tableMeta;
+			}
+
+		}
+	}
+
+
+	// ---
+	const S1 = new SqlQuery("TABLE_NAME");
+
+
+	fDebug();
+
+	function fDebug(){
+		
+		// columnName, colVal, colType
+		btnTest("SQL", (e)=>{
+			//L_(colNames);
+			S1.make(colNames, "colName");
+			L_( S1.showInfo() );
+
+			S1.make(colTypes, "colType");
+			L_( S1.showInfo() );
+
+			S1.make(colVals, "colVal");
+			L_( S1.showInfo() );
+
+			$("#report").text( "SELECT " + S1.getSql() + " FROM DUAL" );
+		
+
+		});
+
+	}
+
+});
+
+
+</script>
+
+
+</head>
+
+
+<body>
+
+
+	<noscript>
+	<iframe src="../include/ns.html?id=DateTime" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+	</noscript>
+
+
+	<div id="wrap">
+		<div id="_DEBUG_"></div>
+	<div>
+
+	<hr/>
+
+		<section id="SQL">
+			<div>SQL</div>
+			<div id="report"></div>
+		</section>
+
+	
+	<div>
+		<div id="_CHECK_">check 지역</div>
+	</div>
+	
+
+
+</body>
+</html>

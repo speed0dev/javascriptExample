@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-language" content="ko">
+<meta name="language" content="ko">
+<meta property="og:url" content="http://test.tst">
+<meta property="og:title" content="타이틀">
+<meta property="og:type" content="website">
+<meta property="og:description" content="테스트 홈피.">
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+<meta name="Author" content="">
+<meta name="copyright" content="(c)2021">
+<meta name="Robots" content="ALL">
+<meta name="keywords" content="키워드">
+<meta name="description" content="설명">
+<title></title>
+
+<link rel="stylesheet" type="text/css" href="../css/common.css">
+<script type="text/javascript" id="wiget" src="../as/load_as.js" async=""></script>
+
+
+<script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+
+<script type="text/javascript" src="../lib/DBinder.js"></script>
+<script type="text/javascript" src="../lib/LDebug.js"></script>
+
+
+<script type="text/javascript">
+
+//
+document.addEventListener("DOMContentLoaded", function(){  //$(document).ready() 동일한 기능
+	L_("Load...");
+	
+	loadDebug();	
+
+	//
+	function loadDebug(){
+		
+		btnTest("[Test01]", (e)=>{
+			L_(e);
+			L_("test 0001");
+		});
+
+		btnTest("[Test02]", (e)=>{
+			L_("test 00002");
+		});
+		
+		//
+		btnTest("[Check]", (e)=>{
+			L_("check 0001");
+		}, "_CHECK_");
+	
+		
+		btnTest("[Check]", (e)=>{
+			L_("check 0001");
+		}, "_CHECK");
+	
+	}
+});	
+
+
+//------------------------
+//
+(function(doc){
+
+	
+
+	$(doc).ready(()=>{
+		L_("ready");
+
+		//const tagObj = $.extend(true, {}, $("#test"));
+		//L_(tagObj);
+
+		//class 로 가져오기
+		//https://developer.mozilla.org/ko/docs/Web/API/Element/getElementsByClassName
+		// node <== 
+
+		const elId = (id)=>{
+			return document.getElementById(id);
+		}
+
+		const elClss = (name)=>{
+			return document.getElementsByClassName(name);
+		}
+
+		//https://developer.mozilla.org/ko/docs/Web/API/Document/getElementsByTagName
+		const elNm = (nm)=>{
+			return document.getElementsByName(nm);
+		}
+		
+
+
+
+		fDebug();
+
+		function fDebug(){
+
+			//
+			btnTest("data-bind1", (e)=>{
+				let obj = document.getElementById("test1");
+				// add dataBind
+				obj.dataset.id = "FFFFFF";
+				obj.dataset.tag = "BBBBBBBBBBBB";
+				obj.dataset.callF = "cf1234";
+				obj.dataset.val = "123456789";
+
+			});
+
+			//
+			btnTest("data-bind2", (e)=>{
+				let obj = document.getElementById("test1");
+				// add dataBind
+				L_(obj.dataset.id);
+				
+				
+			});
+
+
+
+			btnTest("Remove", (e)=>{
+				
+				const LId = document.getElementById;	// <--
+
+				// elId 
+				// elTag
+				// elName
+				// el
+				const LLId = (id)=>{
+					return document.getElementById(id); // elId
+				}
+
+				L_("----- Remove click --------------------");
+				
+				L_( "LId type:" + typeof(LId)); // type 확인 
+				L_( "LLId type:" + typeof(LLId)); // type 확인 
+
+				let obj1 = LId("test");
+				L_(obj1); 
+
+				let obj = LLId("test");
+				L_(obj);
+
+			});
+
+			
+			btnTest("ClassName", (e)=>{
+				let items = elClss("sample");
+				L_( "items:" + typeof(items) );
+				L_(items);
+
+				let item = elClss("one");
+				L_( "item:" + typeof(item) );
+				L_(item);
+
+				L_(items[0]);
+
+				L_(item[0]);
+
+			});
+
+			//
+			let newTempObj = null;
+			btnTest("tempNode", (e)=>{
+				newTempObj = elId("check").cloneNode(true);	//deep Copy
+				elId("check").remove();
+
+				L_(newTempObj);
+
+			});
+
+			btnTest("loadTemp", (e)=>{
+				
+				L_(newTempObj);
+				//document.append("AAAAAAAAAAAAAAAAAA"); Node 대상에 대해서 append
+				elId("out").appendChild(newTempObj);
+
+			});
+
+			
+			//---------------------
+			//<-- dataBind function 
+			function attributes(node){
+				//
+				L_(node.nodeName);
+
+				if(node.nodeName !== "#text" &&  node.nodeName !== "#comment"){
+					L_(node);
+					// element.attributes
+					// https://developer.mozilla.org/ko/docs/Web/API/Element/attributes
+					let attrs = node.attributes;
+					L_(attrs);
+
+					if( attrs.length !== "undefined" ){
+						for(let i=0; i<attrs.length||0; i++){
+
+							L_("@attr["+i+"] " + attrs[i].name + " : " + attrs[i].value);	//// name value
+
+							// data forEach
+						}
+					}
+							
+				}
+
+			}
+
+			//
+			btnTest("vueTagBind", (e)=>{
+
+				let node = elId("vueTag");
+				L_(node.innerHTML);
+				
+				//
+				if( node.hasChildNodes()){
+					L_( " count:" + node.childNodes.length);	// 3
+					let cNode = null;
+
+					for(let i=0;i<node.childNodes.length;i++){
+						cNode = node.childNodes[i];
+						L_("["+i+"] begin ------------ ");
+						attributes(cNode);
+						L_("["+i+"] end ------------ ");
+
+					}
+				}
+
+
+			});
+
+			btnTest("forEach", (e)=>{
+				const fruits = ["apple", "orange", "cherry"];
+
+				fruits.forEach( el => L_(el) );		////<==
+
+			});
+
+			//
+			btnTest("text 실행", (e)=>{
+				
+				//
+				let rData = {
+					
+					data: {
+						number : 1
+						,next: 100
+						, numberStr : "F10"		// string
+					}
+
+					,methods: {
+						executeA: function(a){
+							return a + a;	
+						}
+
+						, callF: function(){
+							return "@callF@";
+						}
+					}
+				}
+
+
+				let fStr = " L_(arguments) ; L_(arguments[0]);  return rData.data.number + 1 + rData.methods.executeA(rData.data.numberStr); ";
+			
+				// https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Functions
+				// 실행파라미터 결정
+				let rr = (new Function( 'rData',  fStr ))(rData);  // ==>// (function anonymous(aaa,bbb){
+				L_("RESULT :" + rr );
+
+
+			});
+
+			//
+			btnTest("v-for text실행", (e)=>{
+
+				// v-for
+
+				let attrText = "(value, name, index) in testObj";
+
+				//let attrTextFunc = 'testObj.forEach( (value, name)=>{ L_( ">>>>" + value + " name=" + name  ); } )'; // 실행함수역할 할것.
+				
+				//
+				let attrTextFunc = `{
+										testObj.forEach( (p) => {
+											L_( ">>>> name:" + p.name + " value:" + p.value );  // 
+											//create(p)||null;
+											//setting(p)||null;
+											//append(p)||null;
+										} )
+									}`; // 실행함수역할 할것.
+
+
+				//실행
+				(new Function('testObj', attrTextFunc))( [{name: "첫번째", value:100}, {name: "두번째 AAAAAAAAAAA", value:100}] );
+				
+				//
+
+			});
+
+		}
+
+	});
+
+})(document);
+
+
+</script>
+
+
+</head>
+
+
+<body>
+
+
+	<noscript>
+	<iframe src="../include/ns.html?id=DateTime" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+	</noscript>
+
+
+	<div id="wrap">
+		<div id="_DEBUG_"></div>
+	<div>
+
+	<hr/>
+
+	<div >
+		<section>
+			<div class="sample">01 AAAAA</div>
+			<div class="aaa sample">02 AAAAA</div>
+			<div class="bbb ccc ddd sample">03 AAAAA</div>
+			<div>
+				<span>
+					<code class="one">xCode</code>	
+
+				</span>
+			</div>
+			<div class="xxx sample">04 AAAAA</div>
+			<div class="code sample">05 AAAAA</div>
+			<div class="c123 sample">06 AAAAA</div>
+		</section>
+	</div>
+
+
+	<div id="out"></div>
+
+	<!-- data binder  -->
+	<div id="vueTag">여기는 텍스트 입니다. 
+		한글 ....
+		<button @click="change" @click="11111" @click="22222" @check=""  >Click1</button>  <!-- attributes 2개 -->
+		<button @click="change" @cash="CASH" @on="ON___" @check="newCHeck"  >Click2</button>
+		<div v-for="(value, name, index) in testObj">
+			<span>{{name}}</span>
+		</div>
+	</div>
+	<!--  -->
+
+	<div id="check">
+		<section id="test1" data-bind-tag="AAAA">
+			<ul>
+				<li>01 AAAAAAAAAAAAAAA</li>
+				<li>02 AAAAAAAAAAAAAAA</li>
+				<li>03 AAAAAAAAAAAAAAA</li>
+			</ul>
+		</section>
+
+		<section id="test2" data-bind-tag="AABB">
+			<ul>
+				<li>01 AAAAAAAAAAAAAAA</li>
+				<li>02 AAAAAAAAAAAAAAA</li>
+				<li>03 AAAAAAAAAAAAAAA</li>
+			</ul>
+		</section>
+
+	</div>
+	
+
+
+
+</body>
+</html>

@@ -32,6 +32,89 @@
 
 
 
+const AppInitClzz = function(){
+
+let inner_ = {};
+
+//
+function get_(b){
+
+	if(!isNull(b) && b == true ){
+		delete inner_;
+		inner_ = null;
+	}
+
+	return inner_;
+}
+
+//
+function set_(gObj){
+	delete inner_;
+	inner_ = gObj;
+}
+
+return{
+	get: function(){
+		return get_();
+	}
+	,set: function(gObj){
+		set_(gObj);
+	}
+}
+};
+
+
+//
+const AppInit = (function(){
+
+	let inner_ = {};
+
+	//
+	function get_(b){
+
+		if(!isNull(b) && b == true ){
+			delete inner_;
+			inner_ = null;
+		}
+
+		return inner_;
+	}
+
+	//
+	function set_(gObj){
+		delete inner_;
+		inner_ = gObj;
+	}
+
+	return{
+		get: function(){
+			return get_();
+		}
+		,set: function(gObj){
+			set_(gObj);
+		}
+	}
+})();
+
+// 상속에 대한 정의
+//https://developer.mozilla.org/ko/docs/Web/JavaScript/Inheritance_and_the_prototype_chain 
+// class extends 가능함
+// extends
+
+const AppInitLoader = AppInit; 	// Clone 형식으로 복사 생성이 되어야 함.  // function 만들면 됨
+//L_("00000000000000000");
+//L_(AppInitLoader);
+
+const AppInitExt = new AppInitClzz();	//Interface 개념이 적용가능함.
+L_(AppInitExt)
+// 재정의함
+AppInitExt.get = ()=>{
+	return 12345;
+}
+
+L_(AppInitExt);
+
+
 //---------------------------------
 // singleTon 으로 구성 할 것.
 const gInsInit = (function(){
@@ -341,7 +424,26 @@ document.addEventListener("DOMContentLoaded", function(){  //$(document).ready()
 		btnTest("[Check]", (e)=>{
 			L_("check 0001");
 		}, "_CHECK");
-	
+		
+		btnTest("[ArrayCopy]", (e)=>{
+			//
+			const arr1 = [{aa:100}, {aa:200}, {aa:300}];
+
+			const copyArr = [].concat(arr1);
+			L_(arr1);
+			L_(copyArr);
+
+			//
+			copyArr.push({aa:300, dd:400, ff:500});
+			L_(copyArr);
+
+		}, "_CHECK");
+
+
+		btnTest("[mapOrd]", (e)=>{
+
+
+		});
 	}
 
 

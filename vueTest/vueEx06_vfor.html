@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function(){  //$(document).ready()
 		btnTest("[check]", (e)=>{
 			let el = I_("check01");
 			L_(el);
+			
 		});
 
 		//
@@ -90,13 +91,13 @@ document.addEventListener("DOMContentLoaded", function(){  //$(document).ready()
 			<!-- v-for -->
 			<div> <button @click="change">Click</button> || <button @click="add">add</button> || <button @click="del">del</button> </div>
 			<div v-for="(person, idx) in people" :key="person.name">		<!-- index를 사용해야 할 경우.  key 는 유니크한 값 설정--> 
-				[{{idx}}]{{ person.name}} : {{ person.age }}
+				[{{idx}}]{{ person.name}} : {{ person.age }}  people
 			</div>
 			
 
 			<div style="height:40px;"></div><hr/> 	<!-- v-for  객체를 사용할수 있음. 객체정보를 보기위한 부분 -->
-			<div v-for="(value, name, index) in testObj">
-				<div>[{{index}}]  {{name}}:{{value}} </div>
+			<div v-for="(value, name, index) in testObj">  <!-- testObj 의 요소값을 출력 -->
+				<div>[{{index}}]  {{name}}:{{value}}  [testObj]</div>
 			</div>
 			<button @click="callFunc">함수실행</button>
 

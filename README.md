@@ -3,7 +3,8 @@
 
 Log에서 특정값 찾기
 
-소스압축여부
+1. Javascript 기초 코드 연습
+
 
 MDN Web Docs
  > WebAPI > Node > Node.ownerDocument

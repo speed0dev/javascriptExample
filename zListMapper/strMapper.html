@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-language" content="ko">
+<meta name="language" content="ko">
+<meta property="og:url" content="http://test.tst">
+<meta property="og:title" content="타이틀">
+<meta property="og:type" content="website">
+<meta property="og:description" content="테스트 홈피.">
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+<meta name="Author" content="">
+<meta name="copyright" content="(c)2021">
+<meta name="Robots" content="ALL">
+<meta name="keywords" content="키워드">
+<meta name="description" content="설명">
+<title></title>
+
+<link rel="stylesheet" type="text/css" href="../css/common.css">
+<script type="text/javascript" id="wiget" src="../as/load_as.js" async=""></script>
+
+
+<script type="text/javascript" src="../lib/LDebug.js"></script>
+
+
+<script type="text/javascript">
+
+
+const MapMgr = (function(){
+
+    let tag_ = "";
+
+    function setTag_(tag){
+        tag_ = tag;
+
+    }
+
+    function mergeMaps_(maps){
+
+        let map = maps[0];
+
+        for(let i=1;i<maps.length;i++){
+            map = merge_(map, maps[i]);
+        }
+
+        return map;
+    }
+
+    function merge_(map1, map2){
+       
+        map1.forEach(function(value, key){
+
+            let item = map2.get(key)||null;
+            if(item != null ){
+
+                for(let p in item){
+                    if(!value.hasOwnProperty(p)){
+                        value[p] = item[p];
+                    }
+                }
+            }
+        });
+
+        return map1;
+    }
+
+
+
+    //
+    return{
+
+        mergeMaps: function(maps){
+
+            return mergeMaps_(maps);
+
+        }
+
+    }
+
+
+})();
+
+
+// impXX lnvXX cMgrXX
+
+
+//
+const LDataMapper = function(){
+
+    let map_ = new Map();
+    let ordList_ = [];
+
+    let mapKeys_ = [];
+    let keyName_ = "";
+
+
+    function setMapKeys(keys){
+        let ll = keys.split(";");
+
+        for(let i=0;i<ll.length;i++){
+            if(ll[i] != ""){
+                mapKeys_.push(ll[i]);
+            }
+        }
+
+    }
+
+    //
+    function make_(p1, p2, key){
+        
+        map_.clear();
+        ordList_ = [];
+        mapKeys_ = [];
+        keyName_ = "";
+     
+        setMapKeys(p2);
+        keyName_ = key;
+
+        //L_(mapKeys_);
+
+        let lines = p1.split("\n");
+        let len = lines.length;
+        
+        for(let i=0;i<len;i++){
+
+            if(lines[i] != ""){
+                addItem_(lines[i]);
+
+            }
+
+        }
+
+
+    }
+
+    function addItem_(line){
+        let l = line.trim();
+        if(l != ""){
+            let part = l.split(/\s+/g);
+            
+            let data = {};
+            for(let j=0;j<mapKeys_.length;j++){
+                data[mapKeys_[j]] = part[j];     
+                
+            }
+
+            map_.set(data[keyName_], data);
+            ordList_.push(data[keyName_]);
+
+        }
+
+    }
+
+
+    return {
+
+        make: function(str, inParam, keyName){
+            make_(str, inParam, keyName);
+        }    
+
+        ,get: function(){
+            return {map: map_, list: ordList_};
+        }
+    }
+
+};
+
+
+//convert
+
+//const L_ = console.log;
+
+const EL = (id)=>{ return document.getElementById(id)||null; }
+
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    const m1 = new LDataMapper();
+
+
+    //
+    let btnMap = EL("btnMap");
+    btnMap.onclick = function(e){
+        
+        let strText = EL("ds").value;
+        strText = strText.trim();
+        //L_(strText);
+        m1.make(strText, "name;hName;type;", "name");
+        let r = m1.get();
+        L_(r);
+    };
+
+
+    let btnMap2 = EL("btnMap2");
+    btnMap2.onclick = function(e){
+        
+        const m2 = new LDataMapper();
+
+        let strText = EL("list").value;
+        strText = strText.trim();
+        //L_(strText);
+        m2.make(strText, "hName;name;", "name");
+        let r = m2.get();
+        L_(r);
+    };
+
+    
+
+    // DEBUG
+    btnTest("Maker", (e)=>{
+        
+        //
+        const mm1 = new LDataMapper();
+        const mm2 = new LDataMapper();
+
+
+        let strText = EL("ds").value;
+        strText = strText.trim();
+        //L_(strText);
+        mm1.make(strText, "name;hName;type;", "hName");
+        let r1 = mm1.get();
+
+
+        strText = EL("list").value;
+        mm2.make(strText, "hName;msg", "hName");
+        let r2 = mm2.get();
+        
+        L_("----------------------------");
+        L_(r1);
+        L_("----------------------------");
+        L_(r2);
+        L_("----------------------------");
+
+
+        let rMap = MapMgr.mergeMaps([r2.map, r1.map]);
+        L_("===================");
+        L_(rMap);
+
+    });
+
+    //
+    btnTest("forEach", (e)=>{
+        //
+        let strText = EL("ds").value;
+        strText = strText.trim();
+        //L_(strText);
+        m1.make(strText, "name;hName;type;", "name");
+        let r1 = m1.get();
+
+        let map1= r1.map;
+        L_(map1);
+
+
+        strText = EL("list").value;
+        m1.make(strText, "hName;name;", "name");
+        let r2 = m1.get();
+
+        let map2 = r2.map;
+
+        L_(map1);
+        L_(map2);
+
+        MapMgr.mergeMaps([map1, map2]);
+        L_("==============================");
+
+        L_(map1);
+
+    });
+
+
+});
+
+
+
+</script>
+</head>
+
+<body>
+
+    <div>
+        <div>
+            <div id="_DEBUG_"></div>
+
+        </div>
+    </div>
+
+    <div style="height:20px"></div>
+
+    <div>
+        <div>
+            <div><input type="text" style="width:250px;"></input></div>
+            <div><textarea id="ds" style="width:50%;height:200px;">
+                COMP_CD     한글    String
+                INVC_IL     냉무    Number
+                ITEM_CD1     아이템1  String
+                ITEM_CD2     아이템2  String
+                ITEM_CD3     아이템3  String
+                ITEM_CD4     아이템4  String
+                ITEM_CD5     아이템5  String
+                ITEM_CD6     아이템6  String
+                ITEM_CD7    아이템7  String
+                ITEM_CD8     아이템8  String
+            </textarea></div>
+        </div>
+        <button id="btnMap" >Mapping</button>
+    </div>
+
+    <div style="height:20px"></div>
+
+    <div>
+        <div>
+            <div><input type="text" style="width:250px;"></input></div>
+            <div><textarea id="list" style="width:50%;height:200px;">
+                한글01     INVC_NO
+                한글02      INVC_IL
+                한글03      ITEM_CDA
+                한글04     INVC_NOB
+                한글05      INVC_ILC
+                한글06      ITEM_CDD
+                한글07     INVC_NOE
+                한글08      INVC_ILF
+                한글09      ITEM_CDG
+                한글10     INVC_NO
+                한글11      INVC_IL
+                한글12      ITEM_CD
+                한글13     INVC_NO
+                한글14      INVC_IL
+                한글15      ITEM_CD00
+            </textarea></div>
+        </div>
+        <button id="btnMap2" >Map2</button>
+    </div>
+
+
+</body>
+
+</html>

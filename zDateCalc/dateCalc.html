@@ -27,6 +27,96 @@
 
 <script type="text/javascript">
 
+
+const padStr = (9).toString().padStart(2, '0');
+L_(padStr);
+
+
+// 마지막 날
+function getLastDay(strDay, dot){
+	if(dot === undefined ){
+		dot = "";
+	}
+	
+	let lastDate = new Date(strDay.substr(0,4), (strDay.substr(4,2)), 0);
+
+	return ((lastDate.getFullYear()) + dot +(("0"+(lastDate.getMonth()+1)).slice(-2)) + dot +("0" + lastDate.getDate()).slice(-2));
+}
+
+
+// 날짜 더하기
+function addDay(strDay, num, dot){
+
+	if(dot === undefined ){
+		dot = "";
+	}
+
+	strDay = "" + strDay;
+	
+	if(strDay.length != 8){
+		return "";
+	}
+
+	
+	let srcDate = new Date( strDay.substr(0,4), (strDay.substr(4,2))-1, strDay.substr(6,2));
+
+	let orgDate = new Date(srcDate);
+	orgDate.setDate( orgDate.getDate() + num);
+
+	return ((orgDate.getFullYear()) + dot +(("0"+(orgDate.getMonth()+1)).slice(-2)) + dot +("0" + orgDate.getDate()).slice(-2));
+}
+
+// 현재 시각
+function getTime() {
+    const date = new Date();
+    const seconds = date.getSeconds();
+    const minutes = date.getMinutes();
+    const hours = date.getHours();
+    const time = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+    return time;
+}
+
+
+//현재날짜
+function getCurrDay(dot){
+	if(dot === undefined ){
+		dot = "";
+	}
+	let now = new Date();
+	return ((now.getFullYear()) + dot +(("0"+(now.getMonth()+1)).slice(-2)) + dot +("0" + now.getDate()).slice(-2));
+}
+
+
+//현재날짜
+function getCurrDate(){
+
+	let date = new Date();
+    let year = date.getFullYear().toString();
+    let month = date.getMonth() + 1;
+        month = month < 10 ? '0' + month.toString() : month.toString();
+
+    let day = date.getDate();
+        day = day < 10 ? '0' + day.toString() : day.toString();
+
+	return year + month + day ;
+}
+
+
+// 날짜 구간
+// startMonth ~ endMonth = month count
+function getMonthCount(startDay, endDay){
+
+
+}
+
+// 해당 월의 날짜 수
+function getDayOfMonth(year, month) { 
+	return 32 - new Date(year, month-1, 32).getDate(); 
+}
+
+
+
+
 //
 document.addEventListener("DOMContentLoaded", function(){  //$(document).ready() 동일한 기능
 	L_("Load...");
@@ -37,18 +127,33 @@ document.addEventListener("DOMContentLoaded", function(){  //$(document).ready()
 	//
 	function loadDebug(){
 		
-		btnTest("[Test01]", (e)=>{
-			L_(e);
-			L_("test 0001");
+		btnTest("현재날짜", (e)=>{
+			L_(getCurrDate());
 		});
 
-		btnTest("[Test02]", (e)=>{
-			L_("test 00002");
+		btnTest("현재날짜2", (e)=>{
+			let day1 = getCurrDay("-");
+			let day2 = getCurrDay("");
+			let day3 = getCurrDay();
+
+			L_( day1 + " " + day2 + " " + day3 );
+
 		});
+
+		btnTest("AddDate", (e)=>{
+			L_( addDay("20211122", -1, "/") );
+
+		});
+
+		btnTest("마지막 날", (e)=>{
+			L_( getLastDay("20211121"));
+
+		});
+
 		
 		//
-		btnTest("[Check]", (e)=>{
-			L_("check 0001");
+		btnTest("getTime", (e)=>{
+			L_(getTime());
 		}, "_CHECK_");
 	
 		

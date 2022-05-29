@@ -1,7 +1,7 @@
-# javascriptExample
+## javascriptExample
 
 
-Log에서 특정값 찾기
+#Log에서 특정값 찾기
 
 1. Javascript 기초 코드 연습
 
@@ -12,9 +12,9 @@ Node.ownerDocument
 
 https://developer.mozilla.org/ko/docs/Web/API/Node/ownerDocument
 
-[ownderDocument]("https://developer.mozilla.org/ko/docs/Web/API/Node/ownerDocument" target="_blank)
+- [ownderDocument]("https://developer.mozilla.org/ko/docs/Web/API/Node/ownerDocument" target="_blank)
 
-//
+
 [Link](https://example.org/ "title" target="_blank")
 
 

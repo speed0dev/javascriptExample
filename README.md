@@ -1,7 +1,7 @@
 ## javascriptExample
 
 
-#Log에서 특정값 찾기
+# Log에서 특정값 찾기
 
 1. Javascript 기초 코드 연습
 
